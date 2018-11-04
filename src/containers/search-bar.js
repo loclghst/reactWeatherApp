@@ -1,12 +1,16 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import {fetchWeather} from '../actions/index';
 
-export default class SearchBar extends Component{
+class SearchBar extends Component{
 
     constructor(props){
         super(props);
         this.state = {term: ''}
         //binding onInputChange() to searchBar. Think how = works, rhs is evaluated and assigned to LHS
         this.onInputChange = this.onInputChange.bind(this);
+        this.onFormSubmit = this.onFormSubmit.bind(this);
     }
 
     onInputChange(event){
@@ -23,6 +27,8 @@ export default class SearchBar extends Component{
         //this overrides the default submit behaviour
         event.preventDefault();
         //go fetch weather data
+        this.props.fetchWeather(this.state.term); //we also need to bind this function
+        this.setState({term:''});
     }
 
 
@@ -43,6 +49,15 @@ export default class SearchBar extends Component{
         )
     }
 }
+
+function mapDispatchToProps(dispatch){
+    return bindActionCreators({fetchWeather}, dispatch);
+}
+
+//we give null as first arg because here we dont have a mapStateToProps() , and mapDispatch to props
+//always goes as secong arg to connect
+
+export default connect(null, mapDispatchToProps)(SearchBar);
 
 //Notes
 //By default inside a <form> when the input is focused and user presses enter , brower submits the form
