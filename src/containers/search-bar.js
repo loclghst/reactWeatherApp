@@ -19,10 +19,16 @@ export default class SearchBar extends Component{
         this.setState({term: event.target.value});
     }
 
+    onFormSubmit(event){
+        //this overrides the default submit behaviour
+        event.preventDefault();
+        //go fetch weather data
+    }
+
 
     render(){
         return (
-            <form className='input-group'>
+            <form onSubmit={this.onFormSubmit} className='input-group'>
                 <input
                 value={this.state.term}
                 className='form-control'
@@ -37,3 +43,12 @@ export default class SearchBar extends Component{
         )
     }
 }
+
+//Notes
+//By default inside a <form> when the input is focused and user presses enter , brower submits the form
+//The same happens when user clicks submit
+//to prevent this behaviour we will give an event handler to <form>. the event we want to tap into is
+//the submit event. in react we tap into it using onSubmit
+
+//we are preventing this behavior because when the user presses enter or submit button, we do not want
+//to submit the form, instead we want to make an API request to get weather data.
